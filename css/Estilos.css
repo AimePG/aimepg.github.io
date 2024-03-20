@@ -1,0 +1,68 @@
+﻿body {}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    background-color: honeydew;
+}
+
+.imagen-inicio {
+    width: 100%; 
+    max-width: 500px; 
+    height: auto; 
+    margin-bottom: 20px; 
+}
+
+.boton-inicio {
+    display: inline-block;
+    padding: 10px 20px;
+    font-family: Verdana;
+    font-size: 20px;
+    font-palette: dark;
+    color: black;
+    background-color: aquamarine;
+    border: none;
+    border-radius: 5px;
+    text-decoration: auto;
+    transition: background-color 0.3s ease;
+}
+
+
+#Form_Consulta {
+    margin: 10px 13px 5px 10px;
+    border: solid;
+    border-color: cadetblue;
+}
+
+.input-group {
+    margin-left: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: auto;
+}
+
+.input-group label {
+    margin-right: 10px;
+}
+.form-control{
+    margin-right:10px;
+}
+.bottons {
+    display: flex;
+}
+#btn_Nuevo{
+    margin-left:auto;
+    align-items: center;
+    margin-right: 5px;
+}
+.modal-body {
+    margin: 10px 13px 5px 10px;
+    border: solid;
+    border-color: cadetblue;
+}
+
+

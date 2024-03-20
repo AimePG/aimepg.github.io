@@ -1,0 +1,96 @@
+﻿CREATE TABLE [dbo].[Clientes] (
+    [ID]              BIGINT         IDENTITY (1, 1) NOT NULL,
+    [Nombre]          NVARCHAR (20)  NOT NULL,
+    [PrimerApellido]  NVARCHAR (20)  NOT NULL,
+    [SegundoApellido] NVARCHAR (100) NULL,
+    [Identificacion]  NUMERIC (10)   NOT NULL,
+    [Telefono]        NUMERIC (10)   NOT NULL,
+    [Direccion]       VARCHAR (50)   NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+CREATE PROCEDURE [dbo].[STPR_CLIENTES_PRUEBA_MANTENIMIENTO]
+    @P_ID BIGINT,
+	@P_Nombre NVARCHAR(20),
+    @P_Apellido1 NVARCHAR(20),
+    @P_Apellido2 NVARCHAR(100),
+	@P_Identificacion NUMERIC(10),
+    @P_Telefono NUMERIC(10),
+    @P_Direccion VARCHAR(50),
+    @P_Accion CHAR(1), -- Recibe B para Borrar, I para Insertar y A para Actualizar
+    @P_Mensaje NVARCHAR(50) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        IF @P_Accion = 'I' -- Inserto un registro
+        BEGIN
+            INSERT INTO [dbo].[Clientes] (Nombre, PrimerApellido, SegundoApellido, Identificacion, Telefono, Direccion)
+            VALUES (@P_Nombre, @P_Apellido1, @P_Apellido2, @P_Identificacion, @P_Telefono, @P_Direccion);
+            SET @P_Mensaje = 'Cliente Insertado éxitosamente.';
+        END
+        ELSE IF @P_Accion = 'A' -- Actualizo el registro seleccionado según ID
+        BEGIN
+            UPDATE [dbo].[Clientes]
+            SET Nombre = @P_Nombre,
+                PrimerApellido = @P_Apellido1,
+                SegundoApellido = @P_Apellido2,
+				Identificacion = @P_Identificacion,
+                Direccion = @P_Direccion,
+                Telefono = @P_Telefono
+            WHERE ID = @P_ID; 
+            SET @P_Mensaje = 'Cliente Actualizado éxitosamente.';
+        END
+        ELSE IF @P_Accion = 'B' -- Borrar
+        BEGIN
+            DELETE FROM [dbo].[Clientes]
+            WHERE ID = @P_ID; 
+            SET @P_Mensaje = 'Cliente Eliminado éxitosamente.';
+        END
+        ELSE
+        BEGIN
+            SET @P_Mensaje = 'Accion desconocida';
+        END
+    END TRY
+    BEGIN CATCH
+        SET @P_Mensaje = 'Error: ' + ERROR_MESSAGE();
+    END CATCH
+END
+
+CREATE FUNCTION [dbo].[FTN_CLIENTES_PRUEBA_LISTA_CLIENTES]()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT ID, Nombre, PrimerApellido, SegundoApellido, Identificacion, Telefono, Direccion
+    FROM [dbo].[Clientes]
+)
+
+CREATE FUNCTION [dbo].[FTN_CLIENTES_PRUEBA_LISTA_CLIENTES_POR_ID]
+(
+    @ID BIGINT
+)
+RETURNS TABLE
+AS
+
+RETURN
+(
+    SELECT ID, Nombre, PrimerApellido, SegundoApellido, Identificacion, Telefono, Direccion
+    FROM [dbo].[Clientes]
+    WHERE ID = @ID
+)
+
+CREATE FUNCTION [dbo].[FTN_CLIENTES_PRUEBA_LISTA_CLIENTES_POR_NOMBRE]
+(
+    @Nombre NVARCHAR(20)
+)
+RETURNS TABLE
+AS
+
+RETURN
+(
+    SELECT ID, Nombre, PrimerApellido, SegundoApellido, Identificacion, Telefono, Direccion
+    FROM [dbo].[Clientes]
+    WHERE Nombre = @Nombre
+)
